@@ -22,7 +22,7 @@ Lakukan akses layanan VPS (Kilat VM 2.0) dan untuk detailnya dapat dilihat pada 
 sudo apt update  
 sudo apt install apache2 mariadb-server php-cli php-intl php-xmlrpc php-soap php-mysql php-zip php-gd php-tidy php-mbstring php-curl php-xml php-pear php-bcmath libapache2-mod-php
 ```
-
+![install_LampStack.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752301652_install_LampStack.png)
 Gambar 1. Install Dependencies
 
 Kemudian, aktifkan dan periksa status layanan Apache dan MariaDB dengan perintah yang sesuai.
@@ -33,14 +33,19 @@ sudo systemctl status apache2
 sudo systemctl is-enabled mariadb
 sudo systemctl status mariadb
 ```
+![status_apache.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752301702_status_apache.png)
+Gambar 2. Status Apache2
+
+![StatusDB.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752301720_StatusDB.png)
+Gambar 3. Status MariaDB
+
 Terakhir pastikan versi PHP dan Module PHP yang terinstall
 
 ```
 php -v && php -m
 ```
 
-Gambar 2. Status Apache2
-Gambar 3. Status MariaDB
+![phpvmod.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752301906_phpvmod.png)
 Gambar 4. Versi dan Module PHP
 
 ### 3. Konfigurasi MariaDB
@@ -63,6 +68,7 @@ innodb_large_prefix = 1
 innodb_file_per_table = 1  
 ```
 
+![AddConfigInnoDB.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752301937_AddConfigInnoDB.png)
 Gambar 5. Penambahan konfigurasi MariaDB
 
 Setelah itu, lakukan restart dan jalankan proses pengamanan.
@@ -80,6 +86,7 @@ sudo mariadb_secure_installation
 >    * Instalasi default MariaDB menyertakan database 'test' dan mengizinkan pengguna anonim mengaksesnya. Ketik 'Y' pada kedua opsi untuk menghapus database 'test' dan menghapus akses anonim.
 >    * Terakhir, ketik 'Y' untuk mengonfirmasi proses reload hak akses tabel.
 
+![SecureDb.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302146_SecureDb.png)
 Gambar 6. Pengamanan user root mariaDB
 
 ### 4. Buat Database Moodle
@@ -103,6 +110,7 @@ EXIT;
 
 > **Catatan:** Sesuaikan nama Database, User Database dan Password user database dengan aman.
 
+![CreateDBMoodle.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302175_CreateDBMoodle.png)
 Gambar 7. Pembuatan database
 
 ### 5. Konfigurasi PHP
@@ -123,6 +131,7 @@ date.timezone = <Zona_Waktu_Anda>
 max_input_vars = 5000
 ```
 
+![phpini.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302319_phpini.png)
 Gambar 8. Tunning awal PHP
 
 Setelah konfigurasi disesuaikan dan disimpan lakukan restart service apache dengan perintah:
@@ -142,6 +151,7 @@ cd /var/www
 wget https://download.moodle.org/download.php/direct/stable404/moodle-latest-404.tgz  
 ```
 
+![Downlodmoodle.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302350_Downlodmoodle.png)
 Gambar 9. download source code moodle
 
 
@@ -151,6 +161,7 @@ Setelah Moodle berhasil diunduh, ekstrak file-nya dengan perintah tar di bawah i
 tar xvf moodle-latest-404.tgz  
 ```
 
+![extrakmoodle.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302368_extrakmoodle.png)
 Gambar 10. ektrak source code moodle
 
 Terakhir, jalankan perintah berikut untuk membuat direktori data baru _/var/www/moodledata_, mengubah kepemilikan direktori Moodle ke user _www-data_, dan pastikan kedua direktori (Moodle dan moodledata) bisa ditulis oleh user www-data.
@@ -161,6 +172,7 @@ sudo chown -R www-data:www-data /var/www/moodle /var/www/moodledata
 sudo chmod u+rwx /var/www/moodle /var/www/moodledata
 ```
 
+![addmoodledtchown.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302426_addmoodledtchown.png)
 Gambar 11. menambah direktori moodledata
 
 ### 7. Konfigurasi Virtual Host Apache
@@ -180,6 +192,7 @@ Lalu buat file virtual host Apache baru di /etc/apache2/sites-available/moodle.c
 vi /etc/apache2/sites-available/moodle.conf
 ```
 
+![EditVirtualhost.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302481_EditVirtualhost.png)
 Gambar 12. tambahkan virtualhost
 
 
@@ -219,6 +232,7 @@ Terakhir, restart Apache untuk menerapkan semua perubahan:
 sudo systemctl restart apache2
 ```
 
+![Restartapc.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302515_Restartapc.png)
 Gambar 13. restart webserver
 
 ### 8. Aktifkan HTTPS dengan Certbot & Let's Encrypt
@@ -249,6 +263,10 @@ Setelah proses selesai, _sertifikat SSL_ kamu akan tersimpan di direktori:
 
 Dan instalasi Moodle kamu akan otomatis diamankan dengan HTTPS.
 
+![sslmod.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302724_sslmod.png)
+Gambar 13. Secure SSL
+
+
 ### 9. Installing Moodle
 
 Buka domain Moodle kamu, misalnya https://moodle.domainkamu.com/, dan kamu akan melihat tampilan wizard instalasi Moodle.
@@ -257,47 +275,57 @@ Berikut langkah-langkah yang perlu kamu ikuti:
 
 a. Pilih bahasa default yang ingin digunakan, lalu klik Next.
 
-Gambar 13. pilih bahasa
+![Instalasiweb.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302740_Instalasiweb.png)
+Gambar 14. pilih bahasa
 
 b. Masukkan lokasi direktori data Moodle, yaitu: _/var/www/moodledata_
 
-Gambar 14. tentukan roor direktori
+![Instalasiweb1.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302935_Instalasiweb1.png)
+Gambar 15. tentukan roor direktori
 
 c. Pilih MariaDB sebagai driver database.
 
-Gambar 15. sesuaikan database server
+![Instalasiweb2.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302757_Instalasiweb2.png)
+Gambar 16. sesuaikan database server
 
 d. Masukkan detail database yang sudah kamu buat sebelumnya (nama database, username, dan password).
 
-Gambar 16. penyesuaian database
+![Instalasiweb3.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302779_Instalasiweb3.png)
+Gambar 17. penyesuaian database
 
 e. Klik Continue untuk menyetujui pemberitahuan hak cipta (copyright notice).
 
-Gambar 17. setujui hak cipta
+![Instalasiweb4.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752302957_Instalasiweb4.png)
+Gambar 18. setujui hak cipta
 
 f. Pada bagian server checks, pastikan semua kebutuhan sistem sudah terpenuhi.
 
-Gambar 18. penyesuaian kebutuhan
+![Instalasiweb5.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752303017_Instalasiweb5.png)
+Gambar 19. penyesuaian kebutuhan
 
 g. Setelah itu, proses instalasi Moodle akan berjalan secara otomatis.
 
-Gambar 18. proses instalasi
+![Instalasiweb6.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752303042_Instalasiweb6.png)
+Gambar 20. proses instalasi
 
 h. Jika sudah selesai, kamu akan diminta untuk membuat akun admin baru. Masukkan username, email, dan password untuk akun admin Moodle kamu.
 
-Gambar 19. credential admin 
+![Instalasiweb7.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752303063_Instalasiweb7.png)
+Gambar 21. credential admin 
 
 i. Setelah semua selesai, kamu akan diarahkan ke dashboard Moodle, dan siap untuk digunakan!
 
-Gambar 20. dashbord moodle
+![SiapDiEksekusi.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752303167_SiapDiEksekusi.png)
+Gambar 22. dashbord moodle
 
 ### 10. Troubleshooting Moodle
 
-Pada saat bagian f, kami menemukan kendala error sesuai Gambar 21.
+Pada saat bagian f, kami menemukan kendala error sesuai Gambar 23.
 
-Gambar 21. error type database
+![Errortypemysql.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752303197_Errortypemysql.png)
+Gambar 23. error type database
 
-Dengan error itu kami melakukan penyesuaian pada file moodle/config.php seperti Gambar 22
+Dengan error itu kami melakukan penyesuaian pada file moodle/config.php seperti Gambar 24
 
 ```
 vi moodle/config.php
@@ -309,7 +337,8 @@ lakukan penyesuaian pada bagian berikut:
 $CFG->dbtype    = 'mariadb';
 ```
 
-Gambar 22. penyesuaian type database
+![resolveerror.png](https://s3-id-jkt-1.kilatstorage.id/knowledgebase/2025/07/1752303278_resolveerror.png)
+Gambar 24. penyesuaian type database
 
 ### Kesimpulan
 
